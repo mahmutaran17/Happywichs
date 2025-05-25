@@ -21,4 +21,4 @@ for category, items in menu.items():
         st.write(f"**{name}** - {price:.2f}₺")
 
 if st.button("Ana Sayfaya Dön"):
-    st.switch_page("pages/1_🏠_Ana_Sayfa.py")
+    st.switch_page("pages/main_page.py")
