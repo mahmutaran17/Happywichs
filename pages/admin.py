@@ -1,37 +1,37 @@
 import streamlit as st
 import pandas as pd
 
-# Authentication check
-if not st.session_state.get("is_admin"):
-    st.error("⛔ Yönetici erişimi gereklidir!")
-    st.switch_page("pages/main_page.py")
+from pages.sign_in import username
 
-st.title("👨‍💻 Yönetici Paneli")
-st.subheader("Geri Bildirimler")
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "1234"
 
-try:
-    df = pd.read_csv("feedback.csv")
+st.title("🔐 Admin Paneli")
 
-    # Filters
-    st.sidebar.header("Filtreleme")
-    name_search = st.sidebar.text_input("İsme göre ara")
-    date_filter = st.sidebar.date_input("Tarihe göre filtrele")
+if "admin_logged_in" not in st.session_state:
+    st.session_state.admin_logged_in = False
 
-    if name_search:
-        df = df[df["name"].str.contains(name_search, case=False)]
-    if date_filter:
-        df = df[df["order_date"] == date_filter.strftime("%d.%m.%Y")]
+if not st.session_state.admin_logged_in:
+    st.subheader("Giriş Yap")
+    username = st.text_input("Kullanıcı adı", key="admin_username_input")
+    password = st.text_input("Şifre", type="password", key="admin_password_input")
 
-    # Display
-    st.dataframe(df)
+    if st.button("Giriş"):
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            st.session_state.admin_logged_in = True
+            st.success("Giriş Başarılı !")
+        else:
+            st.error("Kullanıcı adı veya şifreniz hatalı !")
 
-    # Download
-    st.download_button(
-        "Veriyi İndir",
-        df.to_csv(index=False),
-        "happywichs_feedback.csv",
-        "text/csv"
-    )
+if st.session_state.admin_logged_in:
+    st.subheader("📋 Müşteri Geri Bildirimleri")
 
-except FileNotFoundError:
-    st.warning("Henüz geri bildirim bulunmamaktadır")
+    try:
+        df = pd.read_csv("feedback.csv")
+        st.dataframe(df, use_container_width=True)
+    except FileNotFoundError:
+        st.warning("Henüz herhangi bir geri bildirim yok.")
+
+    if st.button("Çıkış Yap"):
+        st.session_state.admin_logged_in = False
+        st.rerun()

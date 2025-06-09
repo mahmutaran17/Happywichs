@@ -51,25 +51,4 @@ with st.form("feedback_form"):
         else:
             st.error("Lütfen * işaretli alanları doldurunuz")
 
-# def save_feedback(name, surname, age, order_date, order_no, product_name, feedback):
-#     new_data = pd.DataFrame([{
-#         "name": name,
-#         "surname": surname,
-#         "age": age,
-#         "order_date": order_date.strftime("%d.%m.%Y"),
-#         "order_no": order_no,
-#         "product": product_name,
-#         "comment": feedback,
-#         "timestamp": datetime.now().strftime("%d.%m.%Y %H:%M")
-#     }])
-#
-#     try:
-#         existing = pd.read_csv("feedback.csv")
-#         updated = pd.concat([existing, new_data])
-#     except FileNotFoundError:
-#         updated = new_data
-#
-#     updated.to_csv("feedback.csv", index=False)
-#
-#     feedback_page()
 
